@@ -6,6 +6,15 @@ This note summarizes useful documentation improvements found in the discussion n
 
 The notebook is reference material from a Kaggle discussion page. It is useful because it studies the dataset structure, not just model scores.
 
+## Notebook Reference
+
+| Field | Description |
+| --- | --- |
+| Notebook file | [s6e9-0-exact-twins-31-discrete-zero-shift.ipynb](../src/s6e9-0-exact-twins-31-discrete-zero-shift.ipynb) |
+| Source type | Kaggle discussion notebook |
+| Role in this repo | Reference analysis for dataset structure and documentation improvements |
+| Main topics | Train/test shift, duplicate-like rows, discrete twins, lookup leakage, blend diagnostics |
+
 ## Main Takeaways
 
 | Finding | Notebook Result | Why It Matters |

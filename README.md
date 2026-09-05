@@ -68,6 +68,12 @@ Key takeaways:
 - Those twins are not a useful leakage shortcut; a normal model beats twin-label lookup on the same rows.
 - The dataset is partly "categories wearing numeric clothes," so tree models and target encoding are good future directions.
 
+## Notebook Reference
+
+The notebook [src/s6e9-0-exact-twins-31-discrete-zero-shift.ipynb](src/s6e9-0-exact-twins-31-discrete-zero-shift.ipynb) is included as reference material from a Kaggle discussion page. It supports the project documentation by analyzing train/test shift, duplicate-like rows, discrete-feature twins, and leaderboard-noise considerations.
+
+Summary notes from that notebook are documented in [doc/DISCUSSION_NOTEBOOK_INSIGHTS.md](doc/DISCUSSION_NOTEBOOK_INSIGHTS.md).
+
 ## Python Setup
 
 ```powershell
