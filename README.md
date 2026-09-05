@@ -41,6 +41,7 @@ The required prediction format follows [data/sample_submission.csv](data/sample_
 |   |-- make_baseline_submission.py
 |   |-- make_likelihood_submission.py
 |   |-- make_catboost_submission.py
+|   |-- s6e9-0-exact-twins-31-discrete-zero-shift.ipynb
 |   `-- comparison_page/
 |-- package.json
 |-- requirements.txt
@@ -55,6 +56,17 @@ Two feature-based models are included:
 | --- | --- | --- |
 | Logistic regression | [src/make_likelihood_submission.py](src/make_likelihood_submission.py) | [data/Will_Buy_EV.csv](data/Will_Buy_EV.csv) |
 | CatBoost | [src/make_catboost_submission.py](src/make_catboost_submission.py) | [data/Will_Buy_EV_catboost.csv](data/Will_Buy_EV_catboost.csv) |
+
+## Dataset Structure Lessons
+
+A Kaggle discussion notebook in [src/s6e9-0-exact-twins-31-discrete-zero-shift.ipynb](src/s6e9-0-exact-twins-31-discrete-zero-shift.ipynb) studies train/test shift and duplicate-like rows.
+
+Key takeaways:
+
+- Train and test show no measurable distribution shift under adversarial validation.
+- About 30.668% of train rows have a twin across the 11 low-cardinality/discrete features.
+- Those twins are not a useful leakage shortcut; a normal model beats twin-label lookup on the same rows.
+- The dataset is partly "categories wearing numeric clothes," so tree models and target encoding are good future directions.
 
 ## Python Setup
 
@@ -99,3 +111,4 @@ npm.cmd run build:comparison
 - [Anomaly check](doc/ANOMALY_CHECK.md)
 - [Algorithm description](doc/ALGORITHM_DESCRIPTION.md)
 - [Model output comparison](doc/MODEL_OUTPUT_COMPARISON.md)
+- [Discussion notebook insights](doc/DISCUSSION_NOTEBOOK_INSIGHTS.md)
