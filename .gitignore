@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+node_modules/
+npm-debug.log*
+
+catboost_info/
+
+.env
+.venv/
+venv/

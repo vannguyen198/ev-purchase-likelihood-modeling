@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EV Model Comparison</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="topbar" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Will_Buy_EV model comparison</p>
+          <h1 id="page-title">Logistic Regression vs CatBoost</h1>
+          <p class="subtitle">
+            Two algorithms, same train/test dataset, different ways of turning EV-buying attributes into likelihoods.
+          </p>
+        </div>
+        <div class="verdict-panel">
+          <span class="verdict-label">Current read</span>
+          <strong>CatBoost ranks better</strong>
+          <span>Logistic regression calibrates better</span>
+        </div>
+      </section>
+
+      <section class="metric-grid" aria-label="Headline metrics">
+        <article class="metric-card">
+          <span class="metric-label">Best ROC AUC</span>
+          <strong>CatBoost</strong>
+          <span>0.940719 vs 0.937953</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">Best Log Loss</span>
+          <strong>Logistic</strong>
+          <span>0.233580 vs 0.320222</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">Same ID Order</span>
+          <strong>Pass</strong>
+          <span>286,571 rows aligned</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-label">Rank Agreement</span>
+          <strong>0.991285</strong>
+          <span>Spearman correlation</span>
+        </article>
+      </section>
+
+      <nav class="tabs" aria-label="Comparison sections">
+        <button class="tab is-active" type="button" data-view="overview">Overview</button>
+        <button class="tab" type="button" data-view="metrics">Metrics</button>
+        <button class="tab" type="button" data-view="differences">Differences</button>
+        <button class="tab" type="button" data-view="why">Why</button>
+      </nav>
+
+      <section class="view is-active" data-panel="overview">
+        <div class="split">
+          <section class="model-column logistic">
+            <div class="model-heading">
+              <span class="model-dot"></span>
+              <h2>Logistic Regression</h2>
+            </div>
+            <p>
+              A simpler linear model. Numeric attributes are scaled, categorical attributes are one-hot encoded, and
+              each feature receives a learned weight.
+            </p>
+            <div class="score-row">
+              <span>ROC AUC</span>
+              <strong>0.937953</strong>
+            </div>
+            <div class="score-row">
+              <span>Log loss</span>
+              <strong>0.233580</strong>
+            </div>
+            <p class="note">Best when you want a conservative, explainable, better-calibrated probability baseline.</p>
+          </section>
+
+          <section class="model-column catboost">
+            <div class="model-heading">
+              <span class="model-dot"></span>
+              <h2>CatBoost</h2>
+            </div>
+            <p>
+              A gradient-boosted tree model. It handles categorical attributes natively and can learn thresholds,
+              nonlinear effects, and feature interactions.
+            </p>
+            <div class="score-row">
+              <span>ROC AUC</span>
+              <strong>0.940719</strong>
+            </div>
+            <div class="score-row">
+              <span>Log loss</span>
+              <strong>0.320222</strong>
+            </div>
+            <p class="note">Best when the scoring goal rewards ranking likely buyers above unlikely buyers.</p>
+          </section>
+        </div>
+      </section>
+
+      <section class="view" data-panel="metrics">
+        <div class="toolbar">
+          <label for="metric-select">Metric focus</label>
+          <select id="metric-select">
+            <option value="all">All metrics</option>
+            <option value="ranking">Ranking</option>
+            <option value="calibration">Calibration</option>
+            <option value="distribution">Distribution</option>
+          </select>
+        </div>
+        <div id="metric-table" class="table-wrap"></div>
+      </section>
+
+      <section class="view" data-panel="differences">
+        <div class="chart-section">
+          <div>
+            <h2>Prediction Spread</h2>
+            <p>CatBoost assigns higher probabilities to most rows and crosses the 0.5 threshold more often.</p>
+          </div>
+          <div class="bar-pair" aria-label="Prediction comparison chart">
+            <div class="bar-line">
+              <span>Logistic mean</span>
+              <div class="bar-track"><div class="bar logistic-bar" style="width: 17.48%"></div></div>
+              <strong>0.174844</strong>
+            </div>
+            <div class="bar-line">
+              <span>CatBoost mean</span>
+              <div class="bar-track"><div class="bar catboost-bar" style="width: 29.48%"></div></div>
+              <strong>0.294772</strong>
+            </div>
+            <div class="bar-line">
+              <span>Logistic >= 0.5</span>
+              <div class="bar-track"><div class="bar logistic-bar" style="width: 15.97%"></div></div>
+              <strong>45,773</strong>
+            </div>
+            <div class="bar-line">
+              <span>CatBoost >= 0.5</span>
+              <div class="bar-track"><div class="bar catboost-bar" style="width: 29.46%"></div></div>
+              <strong>84,415</strong>
+            </div>
+          </div>
+        </div>
+        <div id="difference-table" class="table-wrap"></div>
+      </section>
+
+      <section class="view" data-panel="why">
+        <div class="why-grid">
+          <article>
+            <h2>Same Data, Different Shape</h2>
+            <p>
+              Logistic regression adds weighted feature effects together. CatBoost builds many decision trees, so it
+              can react differently to combinations of attributes.
+            </p>
+          </article>
+          <article>
+            <h2>Where CatBoost Jumps Higher</h2>
+            <p>
+              It often rewards rows with low range anxiety, home charging, available subsidy, and shorter commute.
+              These combinations are easier for tree boosting to capture.
+            </p>
+          </article>
+          <article>
+            <h2>Where Logistic Stays Higher</h2>
+            <p>
+              It gives smoother additive credit to features such as high environmental concern and longer commute.
+              That can make it less sensitive to learned thresholds.
+            </p>
+          </article>
+          <article>
+            <h2>Practical Choice</h2>
+            <p>
+              Use CatBoost for ROC AUC style ranking. Use logistic regression if the target metric is log loss or if
+              easier explanation is more important.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script src="./dist/main.js"></script>
+  </body>
+</html>

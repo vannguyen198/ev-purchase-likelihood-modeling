@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "build:comparison": "tsc -p src/comparison_page/tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}
